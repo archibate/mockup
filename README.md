@@ -8,7 +8,7 @@ Easily mock up your C/C++ programs into platform-independent, self-contained exe
 
 Have you annoyed sucking the stupid `GLIBC_xxx symbol not found` errors when trying to copy your locally-compiled programs to your boss's way-too-old CentOS servers?
 
-Annoyed programs 'It works on my Ubuntu 24.04!' but failed to start on customer's ancient Ubuntu 18.04?
+Annoyed 'It works on my Ubuntu 24.04!' but failed to start on customer's ancient Ubuntu 18.04?
 
 This tool fucks them up. 😤
 
@@ -23,6 +23,18 @@ Feel free to use all fancy C++23 cutting edge features, use any dedicated fancy 
 Stupid `libxxx.so not found`, `GLIBC_xxx not found` errors no more.
 
 Enjoy C++23 programming even if targeting poorest CentOS 7 platform.
+
+## Difference to linuxdeployqt?
+
+Unlike other Linux deploy tools that only copies dependent library files, `mockup` also ship `libc.so` and `libstdc++.so` standard libraries.
+
+> Actually, `mockup` will ship the `ld-linux-x86-64.so.2` as well, to ensure 100% compatbility to all Linux distros, as long as it runs on x86-64.
+
+Tools like `linuxdeployqt` only copies external dependencies like `libQtCore.so` and `libtbb.so` still requires you to build the whole program on a very ancient platform like CentOS 7 to ensure enough coverage over most newer Linux distros, thus still under `GLIBCXX symbol not found` curse. This heavily limits the version of gcc toolchain (therefore limits the C++ feature you can use).
+
+While `mockup` doesn't, you can build your program on Ubuntu 24.04 or Arch Linux, and still work on all Linux distros.
+
+Compile anywhere, runs anywhere! Allowing a wider toolchain / C++ standard choice as long as available locally on your develop environment.
 
 ## Usage ✨
 
