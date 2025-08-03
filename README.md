@@ -77,6 +77,22 @@ When `-P` option is on, `mockup` will use `patchelf` to modify your `my_app` and
 
 Run `python mockup.py -h` for more usage helps.
 
+## Still don't believe?
+
+Goto [Release page](https://github.com/archibate/mockup/releases/tag/cpp23test), download the `cpp23test.tgz` there.
+
+It's a simple test C++ program `cpp23` compiled on my latest Arch Linux, used a fancy C++23 feature. Source code can be found [here](example).
+
+I packed it with the `mockup` tool. It should now runs correctly on your whatever Linux distro, with or without C++23 libstdc++ in system environment.
+
+```bash
+wget https://github.com/archibate/mockup/releases/download/cpp23test/cpp23test.tgz
+tar zxvf cpp23test.tgz
+cd cpp23test
+./cpp23.sh  # prints "Hello from C++23".
+./cpp23     # should also works, since I used the -P option.
+```
+
 ## Issues?
 
 Let me know if you have any problems or feature requests about this tiny tool by sending [GitHub issues](https://github.com/archibate/mockup/issues).
