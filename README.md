@@ -93,6 +93,11 @@ cd cpp23test
 ./cpp23     # should also works, since I used the -P option.
 ```
 
+## Limitations 🥺
+
+- Linux executables only, didn't work on Windows / MacOS for now.
+- Can't deploy x86-64 executables to ARM target systems, of course.
+
 ## Issues?
 
 Let me know if you have any problems or feature requests about this tiny tool by sending [GitHub issues](https://github.com/archibate/mockup/issues).
