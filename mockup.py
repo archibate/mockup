@@ -100,11 +100,12 @@ if args.suffix:
         if not args.dry:
             with open(script, 'w') as f:
                 f.write('#!/bin/bash\nset -e\n')
-                if not args.patch:
-                    f.write('LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$(dirname "$0")"')
                 f.write(f'test -x "$(dirname "$0")/{ld_linux}" || chmod +x "$(dirname "$0")/{ld_linux}"\n')
                 f.write(f'test -x "$(dirname "$0")/{name}" || chmod +x "$(dirname "$0")/{name}"\n')
-                f.write(f'exec -a "$0" "$(dirname "$0")/{ld_linux}" "$(dirname "$0")/{name}" "$@"\n')
+                if not args.patch:
+                    f.write(f'LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$(dirname "$0")" exec -a "$0" "$(dirname "$0")/{ld_linux}" "$(dirname "$0")/{name}" "$@"\n')
+                else:
+                    f.write(f'exec -a "$0" "$(dirname "$0")/{ld_linux}" "$(dirname "$0")/{name}" "$@"\n')
             subprocess.check_call(['chmod', '+x', script])
 
     print()
