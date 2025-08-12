@@ -45,11 +45,18 @@ while updates:
         if not line.startswith('\t'):
             continue
 
-        m = re.findall(r'^\t(\S+) => (\S+)(?:\s\([0-9a-fx]+\))?$', line)
-        if not m:
-            continue
-        name, path = m[0]
-        name = os.path.basename(name)
+        if '=>' in line:
+            m = re.findall(r'^\t(\S+) => (\S+)(?:\s\([0-9a-fx]+\))?$', line)
+            if not m:
+                continue
+            name, path = m[0]
+            name = os.path.basename(name)
+        else:
+            m = re.findall(r'^\t(/\S+ld-linux[^\s]*)\s*\(0x[0-9a-f]+\)$', line)
+            if not m:
+                continue
+            path = m[0]
+            name = os.path.basename(path)
         if name in depends:
             if depends[name] != path:
                 print(f'WARNING: multiple path found for {name}: {depends[name]}, {path}')
