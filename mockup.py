@@ -45,11 +45,18 @@ while updates:
         if not line.startswith('\t'):
             continue
 
-        m = re.findall(r'^\t(\S+) => (\S+)(?:\s\([0-9a-fx]+\))?$', line)
-        if not m:
-            continue
-        name, path = m[0]
-        name = os.path.basename(name)
+        if '=>' in line:
+            m = re.findall(r'^\t(\S+) => (\S+)(?:\s\([0-9a-fx]+\))?$', line)
+            if not m:
+                continue
+            name, path = m[0]
+            name = os.path.basename(name)
+        else:
+            m = re.findall(r'^\t(/\S+ld-linux[^\s]*)\s*\(0x[0-9a-f]+\)$', line)
+            if not m:
+                continue
+            path = m[0]
+            name = os.path.basename(path)
         if name in depends:
             if depends[name] != path:
                 print(f'WARNING: multiple path found for {name}: {depends[name]}, {path}')
@@ -100,11 +107,12 @@ if args.suffix:
         if not args.dry:
             with open(script, 'w') as f:
                 f.write('#!/bin/bash\nset -e\n')
-                if not args.patch:
-                    f.write('LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$(dirname "$0")"')
                 f.write(f'test -x "$(dirname "$0")/{ld_linux}" || chmod +x "$(dirname "$0")/{ld_linux}"\n')
                 f.write(f'test -x "$(dirname "$0")/{name}" || chmod +x "$(dirname "$0")/{name}"\n')
-                f.write(f'exec -a "$0" "$(dirname "$0")/{ld_linux}" "$(dirname "$0")/{name}" "$@"\n')
+                if not args.patch:
+                    f.write(f'LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$(dirname "$0")" exec -a "$0" "$(dirname "$0")/{ld_linux}" "$(dirname "$0")/{name}" "$@"\n')
+                else:
+                    f.write(f'exec -a "$0" "$(dirname "$0")/{ld_linux}" "$(dirname "$0")/{name}" "$@"\n')
             subprocess.check_call(['chmod', '+x', script])
 
     print()
