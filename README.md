@@ -49,6 +49,7 @@ This tool `mockup` is to solve all these pains.
 Just run this on your local machine:
 
 ```bash
+curl -fL https://raw.githubusercontent.com/archibate/mockup/refs/heads/main/mockup.py -o mockup.py
 python mockup.py ./my_app -o my_app_packaged
 tar zcvf my_app_pacakged.tgz my_app_packaged
 ```
@@ -88,6 +89,18 @@ python mockup.py ./my_app -P -o my_app_packaged
 When `-P` option is on, `mockup` will use `patchelf` to modify your `my_app` and it's dependent libraries to force them to look up in the `my_app_packaged` (with the power of `$ORIGIN` syntax of RPATH), so that `$LD_LIBRARY_PATH` environment variable is no longer required, allowing `my_app` to invoke target machines local executables (like invoking `/bin/ls` with `system()`) without library conflict errors.
 
 Run `python mockup.py -h` for more usage helps.
+
+## Single-file mode 📜
+
+Directories are messy? Feel un-easy using `tar` commands? `mockup` also supports a single-file mode, package your whole executable and it's dependencies into one, single, executable file! Just add the `-S` option:
+
+```bash
+curl -fL https://raw.githubusercontent.com/archibate/mockup/refs/heads/main/mockup.py -o mockup.py
+python mockup.py ./my_app -P -S -o my_app_packaged
+./my_app_packaged  # this single file is executable!
+```
+
+Now just copy this single file to any Linux machines, it will run as if it was still on your local laptop!
 
 ## Still don't believe?
 
