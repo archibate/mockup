@@ -2,7 +2,18 @@
 
 Easily mock up your C/C++ programs into platform-independent, self-contained executable files. No more GLIBC version pains.
 
-> See that little file `mockup.py` in this repo? Download it. End of your hell Linux deployment experiences.
+> See that little file `mockup.py` in this repo? Download it. End of your hell Linux deployment experiences. 🥵
+
+## Try it now 🔥
+
+```bash
+curl -SLf https://raw.githubusercontent.com/archibate/mockup/refs/heads/main/mockup.py -o mockup.py
+python mockup.py -S ./YOUR_EXECUTABLE_FILE
+```
+
+Now `./YOUR_EXECUTABLE_FILE` is platform-independent, copy to any Linux distros, enjoy.
+
+> Customer review: **I WISH I COULD KNOW THIS FKING TOOL EARLIER NO MORE STATIC LIBC TANGLING AROUND**
 
 ## Mocking dependencies 😏
 
@@ -49,7 +60,7 @@ This tool `mockup` is to solve all these pains.
 Just run this on your local machine:
 
 ```bash
-curl -fL https://raw.githubusercontent.com/archibate/mockup/refs/heads/main/mockup.py -o mockup.py
+curl -SLf https://raw.githubusercontent.com/archibate/mockup/refs/heads/main/mockup.py -o mockup.py
 python mockup.py ./my_app -o my_app_packaged
 tar zcvf my_app_pacakged.tgz my_app_packaged
 ```
@@ -95,12 +106,23 @@ Run `python mockup.py -h` for more usage helps.
 Directories are messy? Feel un-easy using `tar` commands? `mockup` also supports a single-file mode, package your whole executable and it's dependencies into one, single, executable file! Just add the `-S` option:
 
 ```bash
-curl -fL https://raw.githubusercontent.com/archibate/mockup/refs/heads/main/mockup.py -o mockup.py
+curl -SLf https://raw.githubusercontent.com/archibate/mockup/refs/heads/main/mockup.py -o mockup.py
 python mockup.py ./my_app -P -S -o my_app_packaged
 ./my_app_packaged  # this single file is executable!
 ```
 
 Now just copy this single file to any Linux machines, it will run as if it was still on your local laptop!
+
+> Downside of single-file mode: start up will get a little bit slower, since it needs to extract all the files on-the-fly.
+
+By the way, if `-o` option not provided with an output file name, the mockup script will conveniently modify the `my_app` file inplace, be careful!
+
+for one-liner's:
+
+```bash
+curl -SLf https://raw.githubusercontent.com/archibate/mockup/refs/heads/main/mockup.py | python - -PS ./my_app
+./my_app  # this file has been mocked platform-independent nowwww!
+```
 
 ## Still don't believe?
 

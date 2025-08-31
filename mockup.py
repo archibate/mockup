@@ -10,7 +10,7 @@ import re
 
 ap = argparse.ArgumentParser(description='Easily mock up your C/C++ programs into platform-independent, self-contained executable files. No more GLIBC version pains.')
 ap.add_argument('filename', help='path to executable ELF file', nargs='+')
-ap.add_argument('-o', '--output', help='output directory to copy ELF files', required=True)
+ap.add_argument('-o', '--output', help='output directory to copy ELF files', default='')
 ap.add_argument('-f', '--force', help='force clean directory if exists', action='store_true')
 ap.add_argument('-D', '--dry', help='dry run mode, print dependencies only', action='store_true')
 ap.add_argument('-P', '--patch', help='patch ELF files RPATH (requires patchelf)', action='store_true')
@@ -18,10 +18,14 @@ ap.add_argument('-S', '--single', help='output a single file instead of director
 ap.add_argument('-x', '--suffix', help='start up script file suffix (default .sh)', default='.sh')
 args = ap.parse_args()
 
-output_dir = args.output
 if args.single:
     temp_dir_object = tempfile.TemporaryDirectory()
     output_dir = temp_dir_object.name
+else:
+    if args.output:
+        output_dir = args.output
+    else:
+        output_dir = 'bin'
 
 if not args.dry:
     try:
@@ -124,12 +128,14 @@ if args.suffix:
             subprocess.check_call(['chmod', '+x', script])
 
 if args.single:
+    output_file = args.output or args.filename[0]
     for path in args.filename:
         name = os.path.basename(path)
         if len(args.filename) > 1:
-            script = f'{args.output}.{name}'
+            script = f'{args.output}.{name}' if args.output else path
         else:
-            script = args.output
+            script = args.output or path
+        output_file = script
         print('Creating executable script:', script)
         with open(script, 'w') as f:
             f.write('#!/bin/bash\nset -e\n')
@@ -161,9 +167,9 @@ if args.single:
         subprocess.check_call(['chmod', '+x', script])
 
     print()
-    print(f'Done! Now run `{args.output}` to enjoy platform-independent executable!')
-    print(f'You can copy the single-file `{args.output}` to anywhere, any Linux distribution.')
-    print(f'Just run `{args.output}` in it and everything works as it was on your computer!')
+    print(f'Done! Now run `{output_file}` to enjoy platform-independent executable!')
+    print(f'You can copy the single-file `{output_file}` to anywhere, any Linux distribution.')
+    print(f'Just run `{output_file}` in it and everything works as it was on your computer!')
 else:
     print()
     print(f'Done! Now run `{output_dir}/{os.path.basename(files[0])}{args.suffix}` to enjoy platform-independent executable!')
