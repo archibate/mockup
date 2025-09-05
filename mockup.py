@@ -161,7 +161,7 @@ if args.single:
             f.write(f'test -x "$_extractdir/{ld_linux}" || chmod +x "$_extractdir/{ld_linux}"\n')
             f.write(f'test -x "$_extractdir/{name}" || chmod +x "$_extractdir/{name}"\n')
             if not args.patch:
-                f.write(f'LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$_extractdir" exec -a "$0" "$_extractdir/{ld_linux}" "$_extractdir"$0")/{name}" "$@"\n')
+                f.write(f'LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$_extractdir" exec -a "$0" "$_extractdir/{ld_linux}" "$_extractdir/{name}" "$@"\n')
             else:
                 f.write(f'exec -a "$0" "$_extractdir/{ld_linux}" "$_extractdir/{name}" "$@"\n')
         subprocess.check_call(['chmod', '+x', script])
