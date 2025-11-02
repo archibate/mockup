@@ -105,6 +105,8 @@ for name, path in depends.items():
         if not args.dry:
             subprocess.check_call(['chmod', '+x', dest])
             subprocess.check_call(['patchelf', '--set-rpath', '$ORIGIN', dest])
+            if name.endswith('.so') or '.so.' in name:
+                subprocess.check_call(['patchelf', '--set-soname', name, dest])
 
         if path in files:
             print('Set Interpreter:', dest)
